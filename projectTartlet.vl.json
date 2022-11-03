@@ -1,0 +1,69 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 900,
+    "height": 400,
+    "data": {
+      "url": "https://raw.githubusercontent.com/Jakklem/DatavisSets/main/Datasets/municipalitiesV2.geojson",
+      "format": {"property": "features"}
+    },
+    "transform": [{
+        "lookup": "properties.label_en",
+        "from": {
+          "data": {
+            "url": "https://raw.githubusercontent.com/Jakklem/DatavisSets/main/Datasets/EnglishFixedOriginalDataset.csv"
+          },
+          "key": "location",
+          "fields": ["01-01-18"]
+        }
+    }],
+    "params": [
+      {"name": "highlight", "select": {"type": "point", "on": "mouseover"}},
+      {"name": "select", "select": "point"},
+      {
+        "name": "month",
+        "value": 8,
+        "bind": {
+          "input": "range",
+          "min": 8,
+          "max": 9,
+          "step": 1,
+          "name": "Select the month:"
+        }
+      }
+    ],
+
+    "mark": {
+      "type": "geoshape",
+      "fill": "cornflowerblue",
+      "stroke": "black",
+      "cursor": "pointer"
+    },
+    "encoding": {
+      "tooltip": [
+        {
+          "field": "properties.label_en",
+          "title": "Muncipality" 
+        },
+        {
+            "field": "01-01-18",
+            "type": "quantitative",
+            "title": "pluginHybrid"
+        },
+        {
+            "field": "01-01-18",
+            "type": "quantitative",
+            "title": "benzin"
+        }
+
+      ],
+      "fillOpacity": {"condition": {"param": "select", "value": 1}, "value": 0.3},
+      "strokeWidth": {
+        "condition": [
+          {"param": "select", "empty": false, "value": 2},
+          {"param": "highlight", "empty": false, "value": 1}
+        ],
+        "value": 0
+      }
+    },
+    "config": {}
+  }
